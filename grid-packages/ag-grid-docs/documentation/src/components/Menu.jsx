@@ -98,7 +98,7 @@ const Menu = ({ currentFramework, currentPage }) => {
                     setActiveSection(isActive ? null : title);
                 };
 
-                return (
+                return (<>
                     <MenuSection
                         key={title}
                         title={title}
@@ -107,6 +107,7 @@ const Menu = ({ currentFramework, currentPage }) => {
                         isActive={isActive}
                         toggleActive={toggleActive}
                     />
+                </>
                 );
             })}
             <Announcements framework={currentFramework} />
