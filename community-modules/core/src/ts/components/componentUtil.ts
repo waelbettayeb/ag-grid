@@ -7,6 +7,8 @@ import { iterateObject } from '../utils/object';
 import { includes } from '../utils/array';
 import { values } from '../utils/generic';
 
+type GridOptionsKey = keyof GridOptions;
+
 export class ComponentUtil {
 
     // all the events are populated in here AFTER this class (at the bottom of the file).
@@ -19,7 +21,7 @@ export class ComponentUtil {
     public static EXCLUDED_INTERNAL_EVENTS: string[] = [];
 
     // function below fills this with onXXX methods, based on the above events
-    private static EVENT_CALLBACKS: string[];
+    private static EVENT_CALLBACKS: GridOptionsKey[];
 
     public static STRING_PROPERTIES = PropertyKeys.STRING_PROPERTIES;
     public static OBJECT_PROPERTIES = PropertyKeys.OBJECT_PROPERTIES;
@@ -29,7 +31,7 @@ export class ComponentUtil {
     public static FUNCTION_PROPERTIES = PropertyKeys.FUNCTION_PROPERTIES;
     public static ALL_PROPERTIES = PropertyKeys.ALL_PROPERTIES;
 
-    public static getEventCallbacks(): string[] {
+    public static getEventCallbacks(): GridOptionsKey[] {
         if (!ComponentUtil.EVENT_CALLBACKS) {
             ComponentUtil.EVENT_CALLBACKS = ComponentUtil.EVENTS.map(event => ComponentUtil.getCallbackForEvent(event));
         }
@@ -44,9 +46,8 @@ export class ComponentUtil {
             gridOptions = {} as GridOptions;
         }
 
-        // to allow array style lookup in TypeScript, take type away from 'this' and 'gridOptions'
-        const pGridOptions = gridOptions as any;
-        const keyExists = (key: string) => typeof component[key] !== 'undefined';
+        const pGridOptions = gridOptions;
+        const keyExists = (key: GridOptionsKey): key is keyof GridOptions => typeof component[key] !== 'undefined';
 
         // if groupAggFiltering exists and isn't a function, handle as a boolean.
         if (keyExists('groupAggFiltering') && typeof component.groupAggFiltering !== 'function') {
@@ -76,12 +77,12 @@ export class ComponentUtil {
         return gridOptions;
     }
 
-    public static getCallbackForEvent(eventName: string): string {
+    public static getCallbackForEvent(eventName: string): GridOptionsKey {
         if (!eventName || eventName.length < 2) {
-            return eventName;
+            return eventName as any;
         }
 
-        return 'on' + eventName[0].toUpperCase() + eventName.substr(1);
+        return 'on' + eventName[0].toUpperCase() + eventName.substr(1) as any;
     }
 
     public static processOnChange(changes: any, gridOptions: GridOptions, api: GridApi, columnApi: ColumnApi): void {
@@ -89,18 +90,16 @@ export class ComponentUtil {
             return;
         }
 
-        const changesToApply = { ...changes };
+        const changesToApply: { [key in (keyof GridOptions | string)]: any } = { ...changes };
 
-        // to allow array style lookup in TypeScript, take type away from 'this' and 'gridOptions'
-        const pGridOptions = gridOptions as any;
-        const keyExists = (key: string) => changesToApply[key];
+        const keyExists = (key: string): key is keyof GridOptions => changesToApply[key];
 
         // if groupAggFiltering exists and isn't a function, handle as a boolean.
         if (keyExists('groupAggFiltering')) {
             if (typeof changesToApply.groupAggFiltering === 'function') {
-                pGridOptions.groupAggFiltering = changesToApply.groupAggFiltering;
+                gridOptions.groupAggFiltering = changesToApply.groupAggFiltering;
             } else {
-                pGridOptions.groupAggFiltering = ComponentUtil.toBoolean(changesToApply.groupAggFiltering);
+                gridOptions.groupAggFiltering = ComponentUtil.toBoolean(changesToApply.groupAggFiltering);
             }
             delete changesToApply.groupAggFiltering;
         }
@@ -122,15 +121,15 @@ export class ComponentUtil {
             ...ComponentUtil.getEventCallbacks(),
         ]
             .filter(keyExists)
-            .forEach(key => pGridOptions[key] = changesToApply[key].currentValue);
+            .forEach(key => gridOptions[key] = changesToApply[key].currentValue);
 
         ComponentUtil.BOOLEAN_PROPERTIES
             .filter(keyExists)
-            .forEach(key => pGridOptions[key] = ComponentUtil.toBoolean(changesToApply[key].currentValue));
+            .forEach(key => gridOptions[key] = ComponentUtil.toBoolean(changesToApply[key].currentValue));
 
         ComponentUtil.NUMBER_PROPERTIES
             .filter(keyExists)
-            .forEach(key => pGridOptions[key] = ComponentUtil.toNumber(changesToApply[key].currentValue));
+            .forEach(key => gridOptions[key] = ComponentUtil.toNumber(changesToApply[key].currentValue));
 
         if (changesToApply.enableCellTextSelection) {
             api.setEnableCellTextSelection(ComponentUtil.toBoolean(changesToApply.enableCellTextSelection.currentValue));

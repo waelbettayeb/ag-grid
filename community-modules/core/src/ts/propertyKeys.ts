@@ -1,16 +1,18 @@
+import { GridOptions } from "./entities/gridOptions";
+
 /**
  * These keys are used for validating properties supplied on a gridOptions object, and for code generation.
  * If you change the properties on the gridOptions interface, you *must* update this file as well to be consistent.
  */
 export class PropertyKeys {
-    public static STRING_PROPERTIES = [
+    public static STRING_PROPERTIES: (keyof GridOptions)[] = [
         'sortingOrder', 'rowClass', 'rowSelection', 'overlayLoadingTemplate', 'overlayNoRowsTemplate',
         'quickFilterText', 'rowModelType', 'editType', 'domLayout', 'clipboardDelimiter', 'rowGroupPanelShow',
         'multiSortKey', 'pivotColumnGroupTotals', 'pivotRowTotals', 'pivotPanelShow', 'fillHandleDirection',
         'serverSideStoreType', 'groupDisplayType', 'treeDataDisplayType'
     ];
 
-    public static OBJECT_PROPERTIES = [
+    public static OBJECT_PROPERTIES: (keyof GridOptions)[] = [
         'components', 'frameworkComponents', 'rowStyle', 'context', 'autoGroupColumnDef', 'localeText', 'icons',
         'datasource', 'serverSideDatasource', 'viewportDatasource', 'groupRowRendererParams', 'aggFuncs', 'fullWidthCellRendererParams',
         'defaultColGroupDef', 'defaultColDef', 'defaultExportParams', 'defaultCsvExportParams', 'defaultExcelExportParams', 'columnTypes',
@@ -19,11 +21,11 @@ export class PropertyKeys {
         'customChartThemes'
     ];
 
-    public static ARRAY_PROPERTIES = [
+    public static ARRAY_PROPERTIES: (keyof GridOptions)[] = [
         'alignedGrids', 'rowData', 'columnDefs', 'excelStyles', 'pinnedTopRowData', 'pinnedBottomRowData', 'chartThemes'
     ];
 
-    public static NUMBER_PROPERTIES = [
+    public static NUMBER_PROPERTIES: (keyof GridOptions)[] = [
         'rowHeight', 'detailRowHeight', 'rowBuffer', 'colWidth', 'headerHeight', 'groupHeaderHeight', 'floatingFiltersHeight',
         'pivotHeaderHeight', 'pivotGroupHeaderHeight', 'groupDefaultExpanded', 'minColWidth', 'maxColWidth', 'viewportRowModelPageSize',
         'viewportRowModelBufferSize', 'autoSizePadding', 'maxBlocksInCache', 'maxConcurrentDatasourceRequests', 'tooltipShowDelay',
@@ -32,7 +34,7 @@ export class PropertyKeys {
         'undoRedoCellEditingLimit', 'cellFlashDelay', 'cellFadeDelay', 'tabIndex'
     ];
 
-    public static BOOLEAN_PROPERTIES = [
+    public static BOOLEAN_PROPERTIES: (keyof GridOptions)[] = [
         'suppressMakeColumnVisibleAfterUnGroup', 'suppressRowClickSelection', 'suppressCellSelection', 'suppressCellFocus', 'suppressHorizontalScroll',
         'alwaysShowHorizontalScroll', 'alwaysShowVerticalScroll', 'debug', 'enableBrowserTooltips', 'enableCellExpressions',
         'angularCompileRows', 'angularCompileFilters', 'groupSuppressAutoColumn', 'groupSelectsChildren', 'groupIncludeFooter',
@@ -68,7 +70,7 @@ export class PropertyKeys {
     ];
 
     /** You do not need to include event callbacks in this list, as they are generated automatically. */
-    public static FUNCTION_PROPERTIES = [
+    public static FUNCTION_PROPERTIES: (keyof GridOptions)[] = [
         'localeTextFunc', 'getLocaleText', 'groupRowInnerRenderer', 'groupRowInnerRendererFramework',
         'groupRowRenderer', 'groupRowRendererFramework', 'isExternalFilterPresent', 'getRowHeight', 'doesExternalFilterPass',
         'getRowClass', 'getRowStyle', 'getContextMenuItems', 'getMainMenuItems', 'processRowPostCreate', 'processCellForClipboard',
@@ -86,7 +88,7 @@ export class PropertyKeys {
         'loadingCellRendererSelector', 'getRowId', 'groupAggFiltering'
     ];
 
-    public static ALL_PROPERTIES = [
+    public static ALL_PROPERTIES: (keyof GridOptions)[] = [
         ...PropertyKeys.ARRAY_PROPERTIES,
         ...PropertyKeys.OBJECT_PROPERTIES,
         ...PropertyKeys.STRING_PROPERTIES,

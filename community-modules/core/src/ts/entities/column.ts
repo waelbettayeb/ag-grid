@@ -40,31 +40,31 @@ let instanceIdSequence = 0;
 export class Column implements IHeaderColumn, IProvidedColumn, IEventEmitter {
 
     // + renderedHeaderCell - for making header cell transparent when moving
-    public static EVENT_MOVING_CHANGED = 'movingChanged';
+    public static EVENT_MOVING_CHANGED: 'movingChanged' = 'movingChanged';
     // + renderedCell - changing left position
-    public static EVENT_LEFT_CHANGED = 'leftChanged';
+    public static EVENT_LEFT_CHANGED: 'leftChanged' = 'leftChanged';
     // + renderedCell - changing width
-    public static EVENT_WIDTH_CHANGED = 'widthChanged';
+    public static EVENT_WIDTH_CHANGED: 'widthChanged' = 'widthChanged';
     // + renderedCell - for changing pinned classes
-    public static EVENT_LAST_LEFT_PINNED_CHANGED = 'lastLeftPinnedChanged';
-    public static EVENT_FIRST_RIGHT_PINNED_CHANGED = 'firstRightPinnedChanged';
+    public static EVENT_LAST_LEFT_PINNED_CHANGED: 'lastLeftPinnedChanged' = 'lastLeftPinnedChanged';
+    public static EVENT_FIRST_RIGHT_PINNED_CHANGED: 'firstRightPinnedChanged' = 'firstRightPinnedChanged';
     // + renderedColumn - for changing visibility icon
-    public static EVENT_VISIBLE_CHANGED = 'visibleChanged';
+    public static EVENT_VISIBLE_CHANGED: 'visibleChanged' = 'visibleChanged';
     // + every time the filter changes, used in the floating filters
-    public static EVENT_FILTER_CHANGED = 'filterChanged';
+    public static EVENT_FILTER_CHANGED: 'filterChanged' = 'filterChanged';
     // + renderedHeaderCell - marks the header with filter icon
-    public static EVENT_FILTER_ACTIVE_CHANGED = 'filterActiveChanged';
+    public static EVENT_FILTER_ACTIVE_CHANGED: 'filterActiveChanged' = 'filterActiveChanged';
     // + renderedHeaderCell - marks the header with sort icon
-    public static EVENT_SORT_CHANGED = 'sortChanged';
+    public static EVENT_SORT_CHANGED: 'sortChanged' = 'sortChanged';
 
-    public static EVENT_MENU_VISIBLE_CHANGED = 'menuVisibleChanged';
+    public static EVENT_MENU_VISIBLE_CHANGED: 'menuVisibleChanged' = 'menuVisibleChanged';
 
     // + toolpanel, for gui updates
-    public static EVENT_ROW_GROUP_CHANGED = 'columnRowGroupChanged';
+    public static EVENT_ROW_GROUP_CHANGED: 'columnRowGroupChanged' = 'columnRowGroupChanged';
     // + toolpanel, for gui updates
-    public static EVENT_PIVOT_CHANGED = 'columnPivotChanged';
+    public static EVENT_PIVOT_CHANGED: 'columnPivotChanged' = 'columnPivotChanged';
     // + toolpanel, for gui updates
-    public static EVENT_VALUE_CHANGED = 'columnValueChanged';
+    public static EVENT_VALUE_CHANGED: 'columnValueChanged' = 'columnValueChanged';
 
     @Autowired('gridOptionsWrapper') private gridOptionsWrapper: GridOptionsWrapper;
     @Autowired('columnUtils') private columnUtils: ColumnUtils;
@@ -851,3 +851,7 @@ export class Column implements IHeaderColumn, IProvidedColumn, IEventEmitter {
     }
 
 }
+
+export type ColumnEventTypes = {
+    [property in keyof typeof Column]: typeof Column[property] extends string ? typeof Column[property] : never
+}[keyof typeof Column]
