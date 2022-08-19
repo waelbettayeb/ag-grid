@@ -303,26 +303,26 @@ export abstract class CartesianSeries<
                     pickGroup,
                 } = subGroup;
                 const { itemId } = contextNodeData[seriesIdx];
-    
+
                 const subGroupVisible = visible && (seriesItemEnabled.get(itemId) ?? true);
                 const subGroupOpacity = this.getOpacity({ itemId });
                 group.opacity = subGroupOpacity;
                 group.visible = subGroupVisible;
                 pickGroup.visible = subGroupVisible;
                 labelGroup.visible = subGroupVisible;
-    
+
                 if (markerGroup) {
                     markerGroup.opacity = subGroupOpacity;
                     markerGroup.zIndex = group.zIndex >= Layers.SERIES_LAYER_ZINDEX ? group.zIndex : group.zIndex + 1;
                     markerGroup.visible = subGroupVisible;
                 }
-    
+
                 for (const path of paths) {
                     if (path.parent !== group) {
                         path.opacity = subGroupOpacity;
                         path.visible = subGroupVisible;
                     }
-                }    
+                }
 
                 if (!group.visible) {
                     return;
