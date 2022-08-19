@@ -301,7 +301,7 @@ export class Scene {
 
             if (root.visible) {
                 ctx.save();
-                root.render(renderCtx);
+                await root.render(renderCtx);
                 ctx.restore();
             }
         }
