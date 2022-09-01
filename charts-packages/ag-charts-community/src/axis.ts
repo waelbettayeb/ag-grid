@@ -23,6 +23,8 @@ import {
     OPT_FONT_WEIGHT,
     STRING,
     OPT_STRING,
+    OPT_TICK_COUNT,
+    GRID_STYLE,
 } from './util/validation';
 import { ChartAxisDirection } from './chart/chartAxis';
 import { Layers } from './chart/layers';
@@ -38,6 +40,14 @@ export interface GridStyle {
 }
 
 type TickCount = number | CountableTimeInterval;
+
+export class AxisLine {
+    @Validate(NUMBER(0))
+    width: 1;
+
+    @Validate(STRING)
+    color: 'rgba(195, 195, 195, 1)';
+}
 export class AxisTick {
     /**
      * The line width to be used by axis ticks.
@@ -67,6 +77,7 @@ export class AxisTick {
      *     axis.tick.count = year;
      *     axis.tick.count = month.every(6);
      */
+    @Validate(OPT_TICK_COUNT)
     count?: TickCount = undefined;
 }
 
@@ -238,20 +249,7 @@ export class Axis<S extends Scale<D, number>, D = any> {
         return this._crossLines;
     }
 
-    readonly line: {
-        /**
-         * The line width to be used by the axis line.
-         */
-        width: number;
-        /**
-         * The color of the axis line.
-         * Use `undefined` rather than `rgba(0, 0, 0, 0)` to make the axis line invisible.
-         */
-        color?: string;
-    } = {
-        width: 1,
-        color: 'rgba(195, 195, 195, 1)',
-    };
+    readonly line = new AxisLine();
 
     readonly tick = new AxisTick();
     readonly label = new AxisLabel();
@@ -445,6 +443,7 @@ export class Axis<S extends Scale<D, number>, D = any> {
      * Contains only one {@link GridStyle} object by default, meaning all grid lines
      * have the same style.
      */
+    @Validate(GRID_STYLE)
     gridStyle: GridStyle[] = [
         {
             stroke: 'rgba(219, 219, 219, 1)',
@@ -939,6 +938,7 @@ export class Axis<S extends Scale<D, number>, D = any> {
         return String(datum);
     }
 
+    @Validate(NUMBER(0))
     thickness: number = 0;
 
     computeBBox(): BBox {
