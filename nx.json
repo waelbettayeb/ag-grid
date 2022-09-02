@@ -8,5 +8,12 @@
         ]
       }
     }
+  },
+  "targetDefaults": {
+    "build": {
+      "outputs": [
+        "{projectRoot}/**/*.AUTO.json"
+      ]
+    }
   }
 }
