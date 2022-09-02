@@ -17,6 +17,7 @@ import { AgChartOptions } from './agChartOptions';
 import { debouncedAnimationFrame, debouncedCallback } from '../util/render';
 import { CartesianSeries } from './series/cartesian/cartesianSeries';
 import { Point } from '../scene/point';
+import { ARRAY, BOOLEAN, NUMBER, STRING, Validate } from '../util/validation';
 
 const defaultTooltipCss = `
 .ag-chart-tooltip {
@@ -157,16 +158,20 @@ export class ChartTooltip extends Observable {
 
     private observer?: IntersectionObserver;
 
+    @Validate(BOOLEAN)
     enabled: boolean = true;
 
+    @Validate(STRING)
     class: string = Chart.defaultTooltipClass;
 
+    @Validate(NUMBER(0))
     delay: number = 0;
 
     /**
      * If `true`, the tooltip will be shown for the marker closest to the mouse cursor.
      * Only has effect on series with markers.
      */
+    @Validate(BOOLEAN)
     tracking: boolean = true;
 
     constructor(chart: Chart, document: Document) {
@@ -355,6 +360,7 @@ export abstract class Chart extends Observable {
         return this._container;
     }
 
+    @Validate(ARRAY())
     protected _data: any = [];
     set data(data: any) {
         this._data = data;
@@ -385,6 +391,7 @@ export abstract class Chart extends Observable {
     }
 
     private _lastAutoSize: [number, number];
+    @Validate(BOOLEAN)
     protected _autoSize = false;
     set autoSize(value: boolean) {
         if (this._autoSize === value) {
@@ -511,7 +518,7 @@ export abstract class Chart extends Observable {
         this.cleanupDomListeners(this.scene.canvas.element);
 
         this.scene.destroy();
-        this.series.forEach(s => s.destroy());
+        this.series.forEach((s) => s.destroy());
         this.series = [];
     }
 
@@ -533,13 +540,13 @@ export abstract class Chart extends Observable {
 
                 return r;
             })
-            .catch(e => {
+            .catch((e) => {
                 this._pendingFactoryUpdates--;
 
                 throw e;
             });
     }
-    
+
     private _performUpdateType: ChartUpdateType = ChartUpdateType.NONE;
     get performUpdateType() {
         return this._performUpdateType;
@@ -838,7 +845,6 @@ export abstract class Chart extends Observable {
         this.updateContext.firstResizeReceived = true;
 
         if (this.scene.resize(width, height)) {
-
             this.background.width = this.width;
             this.background.height = this.height;
 
